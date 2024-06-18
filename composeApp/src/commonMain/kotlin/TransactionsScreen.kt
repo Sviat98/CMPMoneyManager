@@ -37,18 +37,14 @@ import kotlin.math.roundToInt
 
 
 @Composable
-fun TransactionsScreen() {
-    val transactions = remember {
-        mutableStateListOf<Transaction>().apply {
-            add(Transaction("зарплата", 100.0))
-            add(Transaction("мороженое", -20.0))
-        }
-    }
-
-
-    var dialogState by remember {
-        mutableStateOf<TransactionDialogState>(TransactionDialogState.Closed)
-    }
+fun TransactionsScreen(
+    transactions: List<Transaction>,
+    onDialogOpen: (Boolean)->Unit,
+    onDeleteList: ()-> Unit
+) {
+//    var dialogState by remember {
+//        mutableStateOf<TransactionDialogState>(TransactionDialogState.Closed)
+//    }
 
     val balance by remember {
         derivedStateOf {
@@ -77,7 +73,7 @@ fun TransactionsScreen() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             RoundedButton(onClick = {
-                dialogState = TransactionDialogState.Income
+                onDialogOpen(true)
             }) {
                 Icon(
                     imageVector = Icons.Outlined.Add,
@@ -86,11 +82,11 @@ fun TransactionsScreen() {
                 )
             }
             RoundedButton(onClick = {
-                dialogState = TransactionDialogState.Outcome
+                onDialogOpen(false)
             }) {
                 Text(text = "-", fontSize = 60.sp)
             }
-            RoundedButton(onClick = { transactions.clear() }) {
+            RoundedButton(onClick = { onDeleteList() }) {
                 Text(text = "AC", fontSize = 40.sp)
             }
         }
@@ -112,14 +108,6 @@ fun TransactionsScreen() {
                 )
             }
         }
-    }
-
-    if (dialogState !is TransactionDialogState.Closed) {
-        TransactionDialog(
-            onDismissRequest = { dialogState = TransactionDialogState.Closed },
-            dialogState = dialogState,
-            onTransactionAdd = {transactions.add(it)}
-        )
     }
 }
 
@@ -175,57 +163,6 @@ fun Double.formatToDecimalValue(decimals: Int): Double {
     repeat(decimals) { dotAt *= 10 }
     val roundedValue = (this * dotAt).roundToInt()
     return (roundedValue / dotAt) + (roundedValue % dotAt).toDouble() / dotAt
-}
-
-@Composable
-fun TransactionDialog(
-    onDismissRequest: () -> Unit = {},
-    dialogState: TransactionDialogState = TransactionDialogState.Income,
-    onTransactionAdd: (Transaction)->Unit = {}
-) {
-
-    val isIncome =  dialogState is TransactionDialogState.Income
-
-    var name by remember {
-        mutableStateOf("")
-    }
-
-    var summa by remember {
-        mutableStateOf(0.0.toString())
-    }
-
-    Dialog(onDismissRequest = onDismissRequest) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.background(color = MaterialTheme.colors.background)
-        ) {
-            Text(text = if (isIncome) "Добавьте доход" else "Добавьте расход", color = MaterialTheme.colors.onPrimary)
-            TextField(
-                value = name,
-                onValueChange = { name = it },
-                colors = TextFieldDefaults.textFieldColors(textColor = MaterialTheme.colors.onPrimary)
-            )
-            TextField(
-                value = summa, onValueChange = { summa = it },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                colors = TextFieldDefaults.textFieldColors(textColor = MaterialTheme.colors.onPrimary)
-            )
-            Button(onClick = {
-                val transactionSum = if (!isIncome) (-1*summa.toDouble()) else summa.toDouble()
-                onTransactionAdd(Transaction(name, transactionSum))
-                onDismissRequest()
-            }) {
-                Text("Сохранить")
-            }
-        }
-
-    }
-}
-
-@Preview
-@Composable
-fun TransactionDialogPreview() {
-    TransactionDialog()
 }
 
 data class Transaction(
