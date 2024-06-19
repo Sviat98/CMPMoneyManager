@@ -1,3 +1,5 @@
+package screens.transactionslist
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.*
@@ -14,42 +16,33 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.R
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.roundToInt
 
 
 @Composable
 fun TransactionsScreen(
-    transactions: List<Transaction>,
+    viewModel: TransactionsListViewModel,
     onDialogOpen: (Boolean)->Unit,
-    onDeleteList: ()-> Unit
 ) {
-//    var dialogState by remember {
-//        mutableStateOf<TransactionDialogState>(TransactionDialogState.Closed)
-//    }
 
-    val balance by remember {
-        derivedStateOf {
-            transactions.sumOf { it.summa }
-        }
+    val state by viewModel.state.collectAsState()
+
+    val transactions =  state.transactions
+
+    val balance by derivedStateOf {
+        transactions.sumOf { transaction -> if (transaction.isIncome) transaction.summa else (-1) * transaction.summa }
     }
 
     Column(
@@ -86,7 +79,7 @@ fun TransactionsScreen(
             }) {
                 Text(text = "-", fontSize = 60.sp)
             }
-            RoundedButton(onClick = { onDeleteList() }) {
+            RoundedButton(onClick = { viewModel.deleteTransactions() }) {
                 Text(text = "AC", fontSize = 40.sp)
             }
         }
@@ -104,6 +97,7 @@ fun TransactionsScreen(
             items(transactions) { transaction ->
                 TransactionItem(
                     name = transaction.name,
+                    isIncome = transaction.isIncome,
                     summa = transaction.summa
                 )
             }
@@ -114,6 +108,7 @@ fun TransactionsScreen(
 @Composable
 fun TransactionItem(
     name: String = "",
+    isIncome: Boolean,
     summa: Double = 1.0
 ) {
     Row(
@@ -122,19 +117,19 @@ fun TransactionItem(
     ) {
         Text(name, color = MaterialTheme.colors.onPrimary, fontSize = 24.sp)
         Text(
-            text= "$summa",
+            text= "${ if (isIncome) summa else -1*summa}",
             fontSize = 24.sp,
-            color = if (summa < 0.0) Color.Red else Color.Green
+            color = if (isIncome) Color.Green else Color.Red
         )
     }
 }
 
-sealed class TransactionDialogState {
-    object Closed : TransactionDialogState()
-    object Income: TransactionDialogState()
-    object Outcome: TransactionDialogState()
-    //data class Opened(val isIncome: Boolean) : TransactionDialogState()
-}
+//sealed class TransactionDialogState {
+//    object Closed : TransactionDialogState()
+//    object Income: TransactionDialogState()
+//    object Outcome: TransactionDialogState()
+//    //data class Opened(val isIncome: Boolean) : TransactionDialogState()
+//}
 
 @Composable
 fun RoundedButton(
@@ -165,7 +160,3 @@ fun Double.formatToDecimalValue(decimals: Int): Double {
     return (roundedValue / dotAt) + (roundedValue % dotAt).toDouble() / dotAt
 }
 
-data class Transaction(
-    val name: String,
-    val summa: Double
-)

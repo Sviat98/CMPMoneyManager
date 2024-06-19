@@ -1,3 +1,5 @@
+package screens.transactiondialog
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
@@ -7,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,16 +23,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun TransactionDialog(
     onDismissRequest: () -> Unit = {},
+    viewModel: TransactionDialogViewModel,
     isIncome: Boolean = false,
-    onTransactionAdd: (Transaction) -> Unit = {},
 ) {
-    var name by remember {
-        mutableStateOf("")
-    }
+    val state by viewModel.state.collectAsState()
 
-    var summa by remember {
-        mutableStateOf(0.0.toString())
-    }
 
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
@@ -41,8 +39,8 @@ fun TransactionDialog(
                 color = MaterialTheme.colors.onPrimary,
             )
             TextField(
-                value = name,
-                onValueChange = { name = it },
+                value = state.name,
+                onValueChange = { viewModel.onNameChange(it) },
                 colors =
                     TextFieldDefaults.textFieldColors(
                         textColor = MaterialTheme.colors.onPrimary,
@@ -51,8 +49,8 @@ fun TransactionDialog(
                         ),
             )
             TextField(
-                value = summa,
-                onValueChange = { summa = it },
+                value = state.summa.toString(),
+                onValueChange = { viewModel.onSummaChange(it) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 colors =
                     TextFieldDefaults.textFieldColors(
@@ -62,8 +60,7 @@ fun TransactionDialog(
                     ),
             )
             Button(onClick = {
-                val transactionSum = if (!isIncome) (-1 * summa.toDouble()) else summa.toDouble()
-                onTransactionAdd(Transaction(name, transactionSum))
+                viewModel.addTransaction(state.name,isIncome,state.summa.toDouble())
                 onDismissRequest()
             }) {
                 Text("Сохранить")
@@ -72,8 +69,8 @@ fun TransactionDialog(
     }
 }
 
-@Preview
-@Composable
-fun TransactionDialogPreview() {
-    TransactionDialog()
-}
+//@Preview
+//@Composable
+//fun TransactionDialogPreview() {
+//    TransactionDialog()
+//}

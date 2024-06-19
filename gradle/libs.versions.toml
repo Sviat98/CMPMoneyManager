@@ -17,6 +17,10 @@ androidx-lifecycle-viewmodel = "2.8.0"
 androidx-navigation = "2.8.0-alpha02"
 ksp="2.0.0-1.0.22"
 serialization = "1.7.0"
+koinBom = "3.5.6"
+lifecycle = "2.8.2"
+coroutines = "1.8.1"
+
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -33,6 +37,17 @@ androidx-lifecycle-viewmodel = {group = "org.jetbrains.androidx.lifecycle",name 
 androidx-navigation-compose = {group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation"}
 
 kotlinx-serialization = {group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref="serialization"}
+
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom" }
+koin-compose = { group = "io.insert-koin",name = "koin-compose" }
+koin-android = { group = "io.insert-koin", name = "koin-android" }
+
+
+lifecycle-viewmodel = { group = "androidx.lifecycle",name ="lifecycle-viewmodel", version.ref = "lifecycle"}
+
+kotlinx-coroutines-swing  ={group = "org.jetbrains.kotlinx",name = "kotlinx-coroutines-swing", version.ref = "coroutines" }
+
+
 
 
 [plugins]
