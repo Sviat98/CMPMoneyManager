@@ -14,13 +14,9 @@ class TransactionsRepositoryImpl : TransactionsRepository {
             ),
         )
 
-    override val transactions: StateFlow<List<Transaction>>
-        get() = _transactions.asStateFlow()
-
-//    override fun getTransactions(): StateFlow<List<Transaction>> = _transactions.asStateFlow()
+    override fun getTransactions(): StateFlow<List<Transaction>> = _transactions.asStateFlow()
 
     override suspend fun addTransaction(transaction: Transaction) {
-
         _transactions.value += transaction
     }
 
