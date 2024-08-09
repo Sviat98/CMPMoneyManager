@@ -2,6 +2,7 @@ package screens.transactionslist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
@@ -34,12 +36,12 @@ import kotlin.math.roundToInt
 @Composable
 fun TransactionsScreen(
     viewModel: TransactionsListViewModel,
-    onDialogOpen: (Boolean)->Unit,
+    onDialogOpen: (Boolean) -> Unit,
 ) {
 
     val state by viewModel.state.collectAsState()
 
-    val transactions =  state.transactions
+    val transactions = state.transactions
 
     val balance by derivedStateOf {
         transactions.sumOf { transaction -> if (transaction.isIncome) transaction.summa else (-1) * transaction.summa }
@@ -84,22 +86,31 @@ fun TransactionsScreen(
             }
         }
         Spacer(modifier = Modifier.height(48.dp))
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .background(
-                    color = MaterialTheme.colors.primary,
-                    shape = RoundedCornerShape(12.dp)
-                ),
-            contentPadding = PaddingValues(all = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Box(
+            modifier = Modifier.weight(1f).fillMaxWidth().background(
+                color = MaterialTheme.colors.primary,
+                shape = RoundedCornerShape(12.dp)
+            )
         ) {
-            items(transactions) { transaction ->
-                TransactionItem(
-                    name = transaction.name,
-                    isIncome = transaction.isIncome,
-                    summa = transaction.summa
+            if (transactions.isEmpty()) {
+                Text(
+                    "Здесь пока нет транзакций",
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.colors.onPrimary
                 )
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(all = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(transactions) { transaction ->
+                        TransactionItem(
+                            name = transaction.name,
+                            isIncome = transaction.isIncome,
+                            summa = transaction.summa
+                        )
+                    }
+                }
             }
         }
     }
@@ -117,7 +128,7 @@ fun TransactionItem(
     ) {
         Text(name, color = MaterialTheme.colors.onPrimary, fontSize = 24.sp)
         Text(
-            text= "${ if (isIncome) summa else -1*summa}",
+            text = if (isIncome) "+$summa" else "-$summa",
             fontSize = 24.sp,
             color = if (isIncome) Color.Green else Color.Red
         )
