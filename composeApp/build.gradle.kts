@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -55,9 +56,15 @@ kotlin {
             implementation(libs.kotlinx.serialization)
 
             implementation(project.dependencies.platform(libs.koin.bom))
+            api(libs.koin.core)
             implementation(libs.koin.compose)
 
             implementation(libs.lifecycle.viewmodel)
+
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
+
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -113,4 +120,14 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+room{
+    schemaDirectory("$projectDir/schemas")
+}
+
+
+dependencies{
+    add("kspAndroid", libs.room.compiler)
+    add("kspDesktop", libs.room.compiler)
 }

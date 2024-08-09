@@ -1,10 +1,12 @@
 package model.repository
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import model.db.TransactionEntity
 import model.domain.Transaction
 
 interface TransactionsRepository {
-    fun getTransactions(): StateFlow<List<Transaction>>
+    suspend fun getTransactions(): Flow<List<Transaction>>
     suspend fun addTransaction(transaction: Transaction)
-    fun removeAllTransactions()
+    suspend fun removeAllTransactions()
 }
