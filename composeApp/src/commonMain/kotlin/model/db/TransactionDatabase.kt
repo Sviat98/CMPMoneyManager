@@ -21,7 +21,7 @@ fun getRoomDatabase(
     builder: RoomDatabase.Builder<TransactionDatabase>
 ): TransactionDatabase {
     return builder
-        .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
+        .fallbackToDestructiveMigration(dropAllTables = true)
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
         .build()
