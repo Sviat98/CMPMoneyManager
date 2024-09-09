@@ -5,7 +5,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
+import navigation.TransactionDialogDestination
+import navigation.TransactionsListDestination
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.currentKoinScope
 import screens.transactiondialog.TransactionDialog
@@ -20,42 +22,32 @@ fun App() {
     MoneyManagerTheme {
         val navController = rememberNavController()
 
-        NavHost(navController = navController, startDestination = Screens.Transactions.route) {
-            composable(route = Screens.Transactions.route) {
-
+        NavHost(navController = navController, startDestination = TransactionsListDestination) {
+            composable<TransactionsListDestination> {
                 val transactionsListViewModel = koinViewModel<TransactionsListViewModel>()
                 TransactionsScreen(
                     viewModel = transactionsListViewModel,
-                    onDialogOpen = {
+                    onDialogOpen = {isIncome->
                         navController.navigate(
-                            route = Screens.Dialog.route.replace("{isIncome}", it.toString()),
+                            route =TransactionDialogDestination(isIncome = isIncome),
                         )
                     },
                 )
             }
-            dialog(
-                route = Screens.Dialog.route,
-                arguments = listOf(navArgument("isIncome") { defaultValue = false }),
-            ) { navBackStackEntry ->
-                val isIncome = navBackStackEntry.arguments?.getBoolean("isIncome") ?: false
+            dialog<TransactionDialogDestination>{ navBackStackEntry ->
+                val transactionDialogDestination: TransactionDialogDestination = navBackStackEntry.toRoute()
+
+                val isIncome = transactionDialogDestination.isIncome
 
                 val viewModel  = koinViewModel<TransactionDialogViewModel>()
                 TransactionDialog(
-                    onDismissRequest = { navController.popBackStack() },
+                    onDismissRequest = { navController.navigateUp() },
                     viewModel = viewModel,
                     isIncome = isIncome,
                 )
             }
         }
     }
-}
-
-sealed class Screens(
-    val route: String,
-) {
-    data object Transactions : Screens("transactions")
-
-    data object Dialog : Screens("dialog?isIncome={isIncome}")
 }
 
 @Composable
