@@ -9,7 +9,7 @@ import androidx.navigation.toRoute
 import navigation.TransactionDialogDestination
 import navigation.TransactionsListDestination
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.currentKoinScope
+import org.koin.compose.viewmodel.koinViewModel
 import screens.transactiondialog.TransactionDialog
 import screens.transactiondialog.TransactionDialogViewModel
 import screens.transactionslist.TransactionsListViewModel
@@ -47,13 +47,5 @@ fun App() {
                 )
             }
         }
-    }
-}
-
-@Composable
-inline fun <reified T: ViewModel> koinViewModel(): T {
-    val scope = currentKoinScope()
-    return viewModel {
-        scope.get<T>()
     }
 }

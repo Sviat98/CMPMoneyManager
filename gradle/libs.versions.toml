@@ -3,24 +3,24 @@ agp = "8.2.2"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
-androidx-activityCompose = "1.9.0"
-androidx-appcompat = "1.6.1"
+androidx-activityCompose = "1.9.3"
+androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.1.4"
-androidx-core-ktx = "1.13.1"
+androidx-core-ktx = "1.15.0"
 androidx-espresso-core = "3.5.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.1.5"
-compose-plugin = "1.7.0-beta01"
+compose-plugin = "1.7.0"
 junit = "4.13.2"
-kotlin = "2.0.0"
-androidx-lifecycle-viewmodel = "2.8.0"
+kotlin = "2.0.21"
+androidx-lifecycle-viewmodel = "2.8.3"
 androidx-navigation = "2.8.0-alpha09"
-ksp = "2.0.0-1.0.22"
-serialization = "1.7.0"
-koinBom = "3.5.6"
-lifecycle = "2.8.2"
-coroutines = "1.8.1"
-room = "2.7.0-alpha07"
+ksp = "2.0.21-1.0.28"
+serialization = "1.7.3"
+koinBom = "4.1.0-Beta1"
+lifecycle = "2.8.7"
+coroutines = "1.9.0"
+room = "2.7.0-alpha11"
 sqlite = "2.5.0-SNAPSHOT"
 
 [libraries]
@@ -42,6 +42,8 @@ kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seria
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom" }
 koin-core = { group = "io.insert-koin", name = "koin-core" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose" }
+koin-compose-viewmodel = {group = "io.insert-koin", name = "koin-compose-viewmodel" }
+
 koin-android = { group = "io.insert-koin", name = "koin-android" }
 
 
