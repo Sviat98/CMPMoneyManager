@@ -19,17 +19,27 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.room.util.TableInfo
+import cmpmoneymanager.composeapp.generated.resources.Res
+import cmpmoneymanager.composeapp.generated.resources.actual_balance
+import cmpmoneymanager.composeapp.generated.resources.no_transactions
+import model.settings.domain.LANGUAGES
+import model.settings.domain.Language
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 
 
@@ -51,69 +61,79 @@ fun TransactionsScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background)
-            .padding(bottom = 48.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text("Актуальный баланс", color = MaterialTheme.colors.onPrimary)
-        Text(
-            text = "$balance $",
-            color = MaterialTheme.colors.onPrimary,
-            fontSize = 60.sp
+        LanguageChooser(modifier = Modifier.fillMaxWidth().padding(start = 16.dp, top = 8.dp),
+            currentLanguage = state.currentLanguage,
+            onLanguageChange = { language -> viewModel.setLanguage(language) }
         )
-        Spacer(modifier = Modifier.height(48.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 30.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier =
+            Modifier.padding(bottom = 48.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            RoundedButton(onClick = {
-                onDialogOpen(true)
-            }) {
-                Icon(
-                    imageVector = Icons.Outlined.Add,
-                    modifier = Modifier.size(50.dp),
-                    contentDescription = null
-                )
-            }
-            RoundedButton(onClick = {
-                onDialogOpen(false)
-            }) {
-                Text(text = "-", fontSize = 60.sp)
-            }
-            RoundedButton(onClick = { viewModel.deleteTransactions() }) {
-                Text(text = "AC", fontSize = 40.sp)
-            }
-        }
-        Spacer(modifier = Modifier.height(48.dp))
-        Box(
-            modifier = Modifier.weight(1f).fillMaxWidth().background(
-                color = MaterialTheme.colors.primary,
-                shape = RoundedCornerShape(12.dp)
+            Text(stringResource(Res.string.actual_balance), color = MaterialTheme.colors.onPrimary)
+            Text(
+                text = "$balance $",
+                color = MaterialTheme.colors.onPrimary,
+                fontSize = 60.sp
             )
-        ) {
-            if (transactions.isEmpty()) {
-                Text(
-                    "Здесь пока нет транзакций",
-                    modifier = Modifier.align(Alignment.Center),
-                    color = MaterialTheme.colors.onPrimary
+            Spacer(modifier = Modifier.height(32.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                RoundedButton(onClick = {
+                    onDialogOpen(true)
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Add,
+                        modifier = Modifier.size(50.dp),
+                        contentDescription = null
+                    )
+                }
+                RoundedButton(onClick = {
+                    onDialogOpen(false)
+                }) {
+                    Text(text = "-", fontSize = 60.sp)
+                }
+                RoundedButton(onClick = { viewModel.deleteTransactions() }) {
+                    Text(text = "AC", fontSize = 40.sp)
+                }
+            }
+            Spacer(modifier = Modifier.height(48.dp))
+            Box(
+                modifier = Modifier.weight(1f).fillMaxWidth().background(
+                    color = MaterialTheme.colors.primary,
+                    shape = RoundedCornerShape(12.dp)
                 )
-            } else {
-                LazyColumn(
-                    contentPadding = PaddingValues(all = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(transactions) { transaction ->
-                        TransactionItem(
-                            name = transaction.name,
-                            isIncome = transaction.isIncome,
-                            summa = transaction.summa
-                        )
+            ) {
+                if (transactions.isEmpty()) {
+                    Text(
+                        text = stringResource(Res.string.no_transactions),
+                        modifier = Modifier.align(Alignment.Center),
+                        color = MaterialTheme.colors.onPrimary
+                    )
+                } else {
+                    LazyColumn(
+                        contentPadding = PaddingValues(all = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(transactions) { transaction ->
+                            TransactionItem(
+                                name = transaction.name,
+                                isIncome = transaction.isIncome,
+                                summa = transaction.summa
+                            )
+                        }
                     }
                 }
             }
         }
     }
+
+
 }
 
 @Composable
@@ -132,6 +152,44 @@ fun TransactionItem(
             fontSize = 24.sp,
             color = if (isIncome) Color.Green else Color.Red
         )
+    }
+}
+
+@Composable
+fun LanguageChooser(
+    modifier: Modifier = Modifier,
+    currentLanguage: Language,
+    onLanguageChange: (Language) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Column(modifier = Modifier.then(modifier)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(currentLanguage.label, color = MaterialTheme.colors.onPrimary)
+            IconButton(onClick = { expanded = true }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "Choose Language",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                LANGUAGES.forEach { language ->
+                    DropdownMenuItem(
+                        onClick = {
+                            onLanguageChange(language)
+                            expanded = false
+                        },
+                        content = {
+                            Text(language.label)
+                        }
+                    )
+                }
+            }
+        }
+
     }
 }
 

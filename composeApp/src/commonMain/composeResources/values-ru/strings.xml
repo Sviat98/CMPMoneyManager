@@ -1,0 +1,7 @@
+<resources>
+    <string name = "actual_balance">Актуальный баланс</string>
+    <string name="add_income">Добавьте доход</string>
+    <string name="add_outcome">Добавьте расход</string>
+    <string name="save_label">Сохранить</string>
+    <string name="no_transactions">Здесь пока нет транзакций</string>
+</resources>

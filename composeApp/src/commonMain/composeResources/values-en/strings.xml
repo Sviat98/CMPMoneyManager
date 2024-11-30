@@ -1,0 +1,7 @@
+<resources>
+    <string name = "actual_balance">Actual balance</string>
+    <string name="add_income">Add income</string>
+    <string name="add_outcome">Add outcome</string>
+    <string name="save_label">Save</string>
+    <string name="no_transactions">There are no transactions yet</string>
+</resources>

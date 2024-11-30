@@ -6,6 +6,8 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import model.transaction.entity.TransactionDao
+import model.transaction.entity.TransactionEntity
 
 @Database(
     entities = [TransactionEntity::class],

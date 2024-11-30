@@ -3,8 +3,8 @@ package screens.transactiondialog
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import model.domain.Transaction
-import model.repository.TransactionsRepository
+import model.transaction.domain.Transaction
+import model.transaction.repository.TransactionsRepository
 import mvi.BaseViewModel
 import mvi.Reducer
 

@@ -1,16 +1,13 @@
-package model.repository
+package model.transaction.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import model.db.TransactionDao
-import model.db.toEntity
-import model.domain.Transaction
-import model.domain.toDomain
+import model.transaction.entity.TransactionDao
+import model.transaction.entity.toEntity
+import model.transaction.domain.Transaction
+import model.transaction.domain.toDomain
 
 class TransactionsRepositoryImpl(
     private val transactionDao: TransactionDao

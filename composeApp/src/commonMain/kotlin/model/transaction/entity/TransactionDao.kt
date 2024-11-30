@@ -1,4 +1,4 @@
-package model.db
+package model.transaction.entity
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -1,6 +1,6 @@
-package model.domain
+package model.transaction.domain
 
-import model.db.TransactionEntity
+import model.transaction.entity.TransactionEntity
 
 data class Transaction(
     val id: Int = 0,

@@ -1,9 +1,9 @@
-package model.db
+package model.transaction.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import model.domain.Transaction
+import model.transaction.domain.Transaction
 
 @Entity(tableName = "transactions")
 data class TransactionEntity(
