@@ -13,3 +13,15 @@ expect object LocaleBuilder{
 
 
 expect fun changeLocale(settingsLocale: SettingsLocale)
+
+class NumberFormat(
+    val locale: SettingsLocale,
+    val fractionDigits: Int
+)
+
+expect fun NumberFormat.formatToDecimalString(number: Double): String
+
+
+expect object NumberFormatBuilder{
+    fun getNumberInstance(settingsLocale: SettingsLocale, fractionDigits: Int): NumberFormat
+}

@@ -32,19 +32,18 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalAutofill
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cmpmoneymanager.composeapp.generated.resources.Res
 import cmpmoneymanager.composeapp.generated.resources.actual_balance
 import cmpmoneymanager.composeapp.generated.resources.no_transactions
+import model.settings.NumberFormat
+import model.settings.NumberFormatBuilder
 import model.settings.domain.LOCALES
 import model.settings.domain.SettingsLocale
+import model.settings.formatToDecimalString
 import org.jetbrains.compose.resources.stringResource
-import kotlin.math.roundToInt
-
 
 @Composable
 fun TransactionsScreen(
@@ -56,13 +55,15 @@ fun TransactionsScreen(
 
     val transactions = state.transactions
 
-    val balance by derivedStateOf {
-        transactions.sumOf { transaction -> if (transaction.isIncome) transaction.summa else (-1) * transaction.summa }
-    }
-
     val localization = LocalLocalization.current
 
     println(localization)
+
+    val numberFormat = NumberFormatBuilder.getNumberInstance(localization,2)
+
+    val balance by derivedStateOf {
+        transactions.sumOf { transaction -> if (transaction.isIncome) transaction.summa else (-1) * transaction.summa }
+    }
 
     Column(
         modifier = Modifier
@@ -82,7 +83,7 @@ fun TransactionsScreen(
         ) {
             Text(stringResource(Res.string.actual_balance), color = MaterialTheme.colors.onPrimary)
             Text(
-                text = "$balance $",
+                text = "${numberFormat.formatToDecimalString(balance)} $",
                 color = MaterialTheme.colors.onPrimary,
                 fontSize = 60.sp
             )
@@ -133,7 +134,7 @@ fun TransactionsScreen(
                             TransactionItem(
                                 name = transaction.name,
                                 isIncome = transaction.isIncome,
-                                summa = transaction.summa
+                                summa = numberFormat.formatToDecimalString(transaction.summa)
                             )
                         }
                     }
@@ -149,7 +150,7 @@ fun TransactionsScreen(
 fun TransactionItem(
     name: String = "",
     isIncome: Boolean,
-    summa: Double = 1.0
+    summa: String = ""
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -201,13 +202,6 @@ fun LanguageChooser(
 
     }
 }
-
-//sealed class TransactionDialogState {
-//    object Closed : TransactionDialogState()
-//    object Income: TransactionDialogState()
-//    object Outcome: TransactionDialogState()
-//    //data class Opened(val isIncome: Boolean) : TransactionDialogState()
-//}
 
 @Composable
 fun RoundedButton(
