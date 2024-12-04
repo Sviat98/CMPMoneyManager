@@ -1,5 +1,6 @@
 package di
 
+import AppViewModel
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.room.RoomDatabase
@@ -28,6 +29,8 @@ val appModule = module {
         val builder: RoomDatabase.Builder<TransactionDatabase> = get()
         getRoomDatabase(builder = builder)
     }
+
+    singleOf(::AppViewModel)
 
     single {
         val database: TransactionDatabase = get()

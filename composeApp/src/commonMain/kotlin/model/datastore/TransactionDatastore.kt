@@ -5,27 +5,33 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.map
-import model.settings.domain.LANGUAGES
-import model.settings.domain.Language
-import model.settings.getDefaultLanguage
+import model.settings.Locale
+import model.settings.LocaleBuilder
+import model.settings.domain.LOCALES
+import model.settings.domain.SettingsLocale
 
 class TransactionDatastore(
     private val dataStore: DataStore<Preferences>
 ) {
-    private val languageKey = stringPreferencesKey("language")
+    private val localeKey = stringPreferencesKey("locale")
 
-    private val languageCodes = LANGUAGES.map { it.isoFormat }
+    private val locales = LOCALES.map { Locale(it.isoFormat,it.country) }
 
-    private val defaultLanguage = getDefaultLanguage()
 
-    fun observeLanguage() = dataStore.data.map {
-        it[languageKey]
-            ?: if (defaultLanguage in languageCodes) defaultLanguage else Language.English.isoFormat
+    fun observeLocaleString() = dataStore.data.map {
+        val defaultLocale = LocaleBuilder.getDefault()
+
+        val defaultLocaleString = "${defaultLocale.language}_${defaultLocale.country}"
+
+        println("defaultLocale = $defaultLocale")
+        println("defaultLocaleString = $defaultLocaleString")
+        val englishUKLocaleString = "${SettingsLocale.English_UK.isoFormat}_${SettingsLocale.English_UK.country}"
+        it[localeKey] ?: if (defaultLocale in locales) defaultLocaleString else englishUKLocaleString
     }
 
-    suspend fun setLanguage(lang: String) {
+    suspend fun setLocaleString(localeString: String) {
         dataStore.edit {
-            it[languageKey] = lang
+            it[localeKey] = localeString
         }
     }
 }

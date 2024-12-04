@@ -1,0 +1,7 @@
+<resources>
+    <string name="actual_balance">Aktueller Kontostand</string>
+    <string name="add_income">Einnahmen hinzufügen</string>
+    <string name="add_outcome">Ausgaben hinzufügen</string>
+    <string name="save_label">Speichern</string>
+    <string name="no_transactions">Es gibt noch keine Transaktionen</string>
+</resources>

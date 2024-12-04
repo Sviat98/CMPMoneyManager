@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cmpmoneymanager.composeapp.generated.resources.Res
 import cmpmoneymanager.composeapp.generated.resources.add_income
 import cmpmoneymanager.composeapp.generated.resources.add_outcome
@@ -31,7 +32,7 @@ fun TransactionDialog(
     viewModel: TransactionDialogViewModel,
     isIncome: Boolean = false,
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
 
     Dialog(onDismissRequest = onDismissRequest) {

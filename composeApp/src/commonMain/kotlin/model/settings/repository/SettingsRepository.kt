@@ -1,9 +1,9 @@
 package model.settings.repository
 
 import kotlinx.coroutines.flow.Flow
-import model.settings.domain.Language
+import model.settings.domain.SettingsLocale
 
 interface SettingsRepository {
-    fun observeLanguage(): Flow<Language>
-    suspend fun setLanguage(lang: String)
+    fun observeLocale(): Flow<SettingsLocale>
+    suspend fun setLocaleString(localeString: String)
 }

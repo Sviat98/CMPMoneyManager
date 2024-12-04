@@ -1,5 +1,6 @@
 package screens.transactionslist
 
+import LocalLocalization
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,14 +32,16 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalAutofill
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.room.util.TableInfo
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cmpmoneymanager.composeapp.generated.resources.Res
 import cmpmoneymanager.composeapp.generated.resources.actual_balance
 import cmpmoneymanager.composeapp.generated.resources.no_transactions
-import model.settings.domain.LANGUAGES
-import model.settings.domain.Language
+import model.settings.domain.LOCALES
+import model.settings.domain.SettingsLocale
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 
@@ -49,7 +52,7 @@ fun TransactionsScreen(
     onDialogOpen: (Boolean) -> Unit,
 ) {
 
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val transactions = state.transactions
 
@@ -57,14 +60,20 @@ fun TransactionsScreen(
         transactions.sumOf { transaction -> if (transaction.isIncome) transaction.summa else (-1) * transaction.summa }
     }
 
+    val localization = LocalLocalization.current
+
+    println(localization)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background)
     ) {
         LanguageChooser(modifier = Modifier.fillMaxWidth().padding(start = 16.dp, top = 8.dp),
-            currentLanguage = state.currentLanguage,
-            onLanguageChange = { language -> viewModel.setLanguage(language) }
+            currentLocale = localization,
+            onLanguageChange = { locale ->
+                viewModel.setLocale(locale)
+            }
         )
         Column(
             modifier =
@@ -158,13 +167,13 @@ fun TransactionItem(
 @Composable
 fun LanguageChooser(
     modifier: Modifier = Modifier,
-    currentLanguage: Language,
-    onLanguageChange: (Language) -> Unit
+    currentLocale: SettingsLocale,
+    onLanguageChange: (SettingsLocale) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     Column(modifier = Modifier.then(modifier)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(currentLanguage.label, color = MaterialTheme.colors.onPrimary)
+            Text(currentLocale.label, color = MaterialTheme.colors.onPrimary)
             IconButton(onClick = { expanded = true }) {
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
@@ -176,7 +185,7 @@ fun LanguageChooser(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                LANGUAGES.forEach { language ->
+                LOCALES.forEach { language ->
                     DropdownMenuItem(
                         onClick = {
                             onLanguageChange(language)
@@ -219,13 +228,3 @@ fun RoundedButton(
         buttonContent()
     }
 }
-
-//fun Double.formatToDecimalValue() = DecimalFormat("0.00").format(this)
-
-fun Double.formatToDecimalValue(decimals: Int): Double {
-    var dotAt = 1
-    repeat(decimals) { dotAt *= 10 }
-    val roundedValue = (this * dotAt).roundToInt()
-    return (roundedValue / dotAt) + (roundedValue % dotAt).toDouble() / dotAt
-}
-
