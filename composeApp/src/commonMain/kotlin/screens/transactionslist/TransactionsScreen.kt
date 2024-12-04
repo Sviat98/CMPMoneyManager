@@ -59,7 +59,7 @@ fun TransactionsScreen(
 
     println(localization)
 
-    val numberFormat = NumberFormatBuilder.getNumberInstance(localization,2)
+    val numberFormat = NumberFormatBuilder.getNumberInstance(localization, 2)
 
     val balance by derivedStateOf {
         transactions.sumOf { transaction -> if (transaction.isIncome) transaction.summa else (-1) * transaction.summa }

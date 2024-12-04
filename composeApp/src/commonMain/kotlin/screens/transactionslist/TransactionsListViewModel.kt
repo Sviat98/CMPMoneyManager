@@ -32,7 +32,7 @@ class TransactionsListViewModel(
         }
 
         viewModelScope.launch {
-            settingsRepository.observeLocale().collect { locale->
+            settingsRepository.observeLocale().collect { locale ->
                 changeLocale(locale)
                 //sendEvent(TransactionsListUiEvent.ChangeLanguage(language = language))
             }
@@ -63,6 +63,7 @@ class TransactionsListViewModel(
                 is TransactionsListUiEvent.ShowTransactionsList -> {
                     setState(oldState.copy(transactions = event.transactions))
                 }
+
                 else -> {}
             }
         }

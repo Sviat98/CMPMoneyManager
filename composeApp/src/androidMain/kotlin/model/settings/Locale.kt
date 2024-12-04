@@ -26,7 +26,6 @@ actual fun NumberFormat.formatToDecimalString(number: Double): String {
     return numberFormat.format(number)
 }
 
-
 actual object NumberFormatBuilder{
     actual fun getNumberInstance(settingsLocale: SettingsLocale, fractionDigits: Int): NumberFormat {
         val locale = JavaLocale(settingsLocale.isoFormat,settingsLocale.country)

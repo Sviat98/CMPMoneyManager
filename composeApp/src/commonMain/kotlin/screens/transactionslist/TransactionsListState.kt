@@ -14,8 +14,8 @@ sealed class TransactionsListUiEvent : UiEvent {
 @Immutable
 data class TransactionsListState(
     val transactions: List<Transaction>,
-): UiState{
-    companion object{
+) : UiState {
+    companion object {
         fun initial() = TransactionsListState(
             transactions = emptyList(),
         )

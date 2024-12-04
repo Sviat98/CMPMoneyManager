@@ -11,7 +11,6 @@ expect object LocaleBuilder{
     fun getDefault(): Locale
 }
 
-
 expect fun changeLocale(settingsLocale: SettingsLocale)
 
 class NumberFormat(
@@ -20,7 +19,6 @@ class NumberFormat(
 )
 
 expect fun NumberFormat.formatToDecimalString(number: Double): String
-
 
 expect object NumberFormatBuilder{
     fun getNumberInstance(settingsLocale: SettingsLocale, fractionDigits: Int): NumberFormat
