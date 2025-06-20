@@ -1,5 +1,4 @@
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +23,7 @@ class AppViewModel(
         viewModelScope.launch {
             settingsRepository.observeLocale().distinctUntilChanged().collect{locale->
                 _state.value = _state.value.copy(locale = locale)
+                println("AppViewModel locale = $locale")
             }
         }
     }

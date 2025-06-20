@@ -9,11 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,7 +20,6 @@ import cmpmoneymanager.composeapp.generated.resources.add_income
 import cmpmoneymanager.composeapp.generated.resources.add_outcome
 import cmpmoneymanager.composeapp.generated.resources.save_label
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TransactionDialog(
@@ -33,7 +28,6 @@ fun TransactionDialog(
     isIncome: Boolean = false,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
 
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
@@ -55,7 +49,7 @@ fun TransactionDialog(
                         ),
             )
             TextField(
-                value = state.summa.toString(),
+                value = state.summa,
                 onValueChange = { viewModel.onSummaChange(it) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 colors =

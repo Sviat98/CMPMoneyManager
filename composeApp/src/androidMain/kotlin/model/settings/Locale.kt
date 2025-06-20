@@ -14,6 +14,7 @@ actual object LocaleBuilder{
 
 actual fun changeLocale(settingsLocale: SettingsLocale) {
     val locale = JavaLocale(settingsLocale.isoFormat,settingsLocale.country)
+    println("change locale to ${locale.language}_${locale.country}")
     JavaLocale.setDefault(locale)
 }
 

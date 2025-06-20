@@ -16,7 +16,7 @@ kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_19)
         }
     }
     
@@ -50,7 +50,12 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
+            implementation(libs.compose.material.icons.core)
+
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.runtime.compose)
+
+
             implementation(libs.androidx.navigation.compose)
 
             implementation(libs.kotlinx.serialization)
@@ -59,9 +64,6 @@ kotlin {
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-
-
-            implementation(libs.lifecycle.viewmodel)
 
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
@@ -101,8 +103,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
     buildFeatures {
         compose = true

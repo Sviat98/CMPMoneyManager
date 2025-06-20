@@ -38,7 +38,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cmpmoneymanager.composeapp.generated.resources.Res
 import cmpmoneymanager.composeapp.generated.resources.actual_balance
 import cmpmoneymanager.composeapp.generated.resources.no_transactions
-import model.settings.NumberFormat
 import model.settings.NumberFormatBuilder
 import model.settings.domain.LOCALES
 import model.settings.domain.SettingsLocale
@@ -57,7 +56,7 @@ fun TransactionsScreen(
 
     val localization = LocalLocalization.current
 
-    println(localization)
+    println("TransactionsScreen locale = $localization")
 
     val numberFormat = NumberFormatBuilder.getNumberInstance(localization, 2)
 
@@ -78,14 +77,16 @@ fun TransactionsScreen(
         )
         Column(
             modifier =
-            Modifier.padding(bottom = 48.dp),
+            Modifier.weight(1f).padding(bottom = 48.dp)
+                //.verticalScroll(state = rememberScrollState())
+                    ,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(stringResource(Res.string.actual_balance), color = MaterialTheme.colors.onPrimary)
             Text(
                 text = "${numberFormat.formatToDecimalString(balance)} $",
                 color = MaterialTheme.colors.onPrimary,
-                fontSize = 60.sp
+                fontSize = if (balance<1_000_000) 60.sp else 40.sp
             )
             Spacer(modifier = Modifier.height(32.dp))
             Row(

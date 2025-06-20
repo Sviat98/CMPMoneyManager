@@ -34,6 +34,7 @@ class TransactionsListViewModel(
         viewModelScope.launch {
             settingsRepository.observeLocale().collect { locale ->
                 changeLocale(locale)
+                println("TransactionsListViewModel locale = $locale")
                 //sendEvent(TransactionsListUiEvent.ChangeLanguage(language = language))
             }
         }
