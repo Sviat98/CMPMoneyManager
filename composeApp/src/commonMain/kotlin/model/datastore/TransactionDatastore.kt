@@ -30,6 +30,7 @@ class TransactionDatastore(
     }
 
     suspend fun setLocaleString(localeString: String) {
+        println("setLocaleString localeString = $localeString")
         dataStore.edit {
             it[localeKey] = localeString
         }

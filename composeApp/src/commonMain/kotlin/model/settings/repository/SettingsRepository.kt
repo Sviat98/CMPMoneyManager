@@ -5,5 +5,5 @@ import model.settings.domain.SettingsLocale
 
 interface SettingsRepository {
     fun observeLocale(): Flow<SettingsLocale>
-    suspend fun setLocaleString(localeString: String)
+    suspend fun setLocale(locale: SettingsLocale)
 }

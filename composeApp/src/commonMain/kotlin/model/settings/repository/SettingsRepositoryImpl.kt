@@ -17,7 +17,9 @@ class SettingsRepositoryImpl(
         locale
     }
 
-    override suspend fun setLocaleString(localeString: String){
+    override suspend fun setLocale(locale: SettingsLocale){
+        val localeString = "${locale.isoFormat}_${locale.country}"
+
         datastore.setLocaleString(localeString)
     }
 }

@@ -1,6 +1,5 @@
 package screens.transactionslist
 
-import LocalLocalization
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cmpmoneymanager.composeapp.generated.resources.Res
 import cmpmoneymanager.composeapp.generated.resources.actual_balance
 import cmpmoneymanager.composeapp.generated.resources.no_transactions
+import model.settings.LocalLocalization
 import model.settings.NumberFormatBuilder
 import model.settings.domain.LOCALES
 import model.settings.domain.SettingsLocale

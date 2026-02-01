@@ -48,8 +48,7 @@ class TransactionsListViewModel(
 
     fun setLocale(settingsLocale: SettingsLocale) {
         viewModelScope.launch {
-            val localeString = "${settingsLocale.isoFormat}_${settingsLocale.country}"
-            settingsRepository.setLocaleString(localeString)
+            settingsRepository.setLocale(settingsLocale)
         }
     }
 

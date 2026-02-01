@@ -1,15 +1,11 @@
 import androidx.compose.runtime.*
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
-import model.settings.domain.SettingsLocale
+import model.settings.LocalLocalization
 import navigation.TransactionDialogDestination
 import navigation.TransactionsListDestination
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -20,8 +16,6 @@ import screens.transactionslist.TransactionsListViewModel
 import screens.transactionslist.TransactionsScreen
 import theme.MoneyManagerTheme
 
-
-val LocalLocalization = compositionLocalOf<SettingsLocale> { error("No locale found!") }
 
 @Composable
 @Preview
